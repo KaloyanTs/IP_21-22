@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+#include <cstring>
 
 void swap(float& a, float& b)
 {
