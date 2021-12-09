@@ -1,2 +1,2 @@
-# IP_21/22
- Introduction to programming at FMI (I semester)
+# Introduction to programming at FMI (I semester)
+ Kaloyan Tsvetkov
