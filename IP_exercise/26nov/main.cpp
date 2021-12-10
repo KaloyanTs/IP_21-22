@@ -125,7 +125,8 @@ void quickSortRec(int arr[], unsigned left, unsigned right)
 	if (left >= right)
 		return;
 	int pIndex = partition(arr, left, right);
-	quickSortRec(arr, left, (pIndex - 1 < 0 ? 0 : pIndex - 1));
+	if(pIndex >= 1)
+		quickSortRec(arr, left, pIndex - 1);
 	quickSortRec(arr, pIndex + 1, right);
 }
 
