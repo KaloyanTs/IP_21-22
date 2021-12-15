@@ -31,11 +31,12 @@ const int *search_n(const int *begin, const int *end, unsigned count, int elem)
     unsigned i = 0;
     do
     {
-        while (begin != max && *begin != elem)
+        while (begin <= max && *begin != elem)
             ++begin;
         i = 0;
-        while (i < count && *(begin + i) == elem)
-            ++i;
+        if (begin <= max)
+            while (i < count && *(begin + i) == elem)
+                ++i;
     } while (i != count && ++begin <= max);
     return (begin <= max ? begin : nullptr);
 }
@@ -47,9 +48,18 @@ const int *adjacent_find(const int *begin, const int *end)
     return (begin < end - 1 ? begin : nullptr);
 }
 
+const int *find_end(const int *begin, const int *end, const int *s_begin, const int *s_end)
+{
+    unsigned size = s_end - s_begin;
+    const int *srch = end - size;
+    while (srch >= begin && !equal(srch, srch + size, s_begin, s_end))
+        --srch;
+    return (srch >= begin ? srch : nullptr);
+}
+
 int main()
 {
-    int a[] = {1, 2, 1, 3, 3, 2, 2, 2};
+    int a[] = {1, 2, 1, 3, 3, 1, 3, 2};
     int b[] = {1, 3};
     std::cout << equal(a + 2, a + 4, b, b + 2) << '\n';
     std::cout << equal(a + 6, a + 8, b, b + 2) << '\n';
@@ -59,13 +69,18 @@ int main()
     else
         std::cout << "Not found.\n";
     search_res = search_n(a, a + 8, 3, 2);
-    std::cout << '3' << " * " << '2' << (search_n ? " found on position " : "not found.\n");
-    if (search_n)
+    std::cout << '3' << " * " << '2' << (search_res ? " found on position " : " not found.\n");
+    if (search_res)
         std::cout << search_res - a << ".\n";
     search_res = adjacent_find(a, a + 8);
     if (search_res)
         std::cout << *search_res << " repeating on position " << search_res - a << '\n';
     else
         std::cout << "No consecutive repeating elements.\n";
+    search_res = find_end(a, a + 8, b, b + 2);
+    if (search_n)
+        std::cout << "Last occurence is on position " << search_res - a << '\n';
+    else
+        std::cout << "No occurences.\n";
     return 0;
 }
