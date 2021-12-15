@@ -40,9 +40,16 @@ const int *search_n(const int *begin, const int *end, unsigned count, int elem)
     return (begin <= max ? begin : nullptr);
 }
 
+const int *adjacent_find(const int *begin, const int *end)
+{
+    while (begin < end - 1 && *(begin) != *(begin + 1))
+        ++begin;
+    return (begin < end - 1 ? begin : nullptr);
+}
+
 int main()
 {
-    int a[] = {1, 2, 1, 3, 2, 2, 2, 9};
+    int a[] = {1, 2, 1, 3, 3, 2, 2, 2};
     int b[] = {1, 3};
     std::cout << equal(a + 2, a + 4, b, b + 2) << '\n';
     std::cout << equal(a + 6, a + 8, b, b + 2) << '\n';
@@ -55,5 +62,10 @@ int main()
     std::cout << '3' << " * " << '2' << (search_n ? " found on position " : "not found.\n");
     if (search_n)
         std::cout << search_res - a << ".\n";
+    search_res = adjacent_find(a, a + 8);
+    if (search_res)
+        std::cout << *search_res << " repeating on position " << search_res - a << '\n';
+    else
+        std::cout << "No consecutive repeating elements.\n";
     return 0;
 }
