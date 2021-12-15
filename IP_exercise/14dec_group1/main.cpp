@@ -57,13 +57,27 @@ const int *find_end(const int *begin, const int *end, const int *s_begin, const 
     return (srch >= begin ? srch : nullptr);
 }
 
+const int *isInArray(const int *begin, const int *end, int val)
+{
+    while (begin < end && *begin != val)
+        ++begin;
+    return (begin < end ? begin : nullptr);
+}
+
+const int *find_first_of(const int *begin, const int *end, const int *s_begin, const int *s_end)
+{
+    while (begin < end && !isInArray(s_begin, s_end, *begin))
+        ++begin;
+    return (begin < end ? begin : nullptr);
+}
+
 int main()
 {
-    int a[] = {1, 2, 1, 3, 3, 1, 3, 2};
+    int a[] = {6, 2, 1, 3, 3, 1, 3, 2};
     int b[] = {1, 3};
     std::cout << equal(a + 2, a + 4, b, b + 2) << '\n';
     std::cout << equal(a + 6, a + 8, b, b + 2) << '\n';
-    
+
     const int *search_res = search(a, a + 8, b, b + 2);
     if (search_res)
         std::cout << search_res - a << '\n';
@@ -86,5 +100,11 @@ int main()
         std::cout << "Last occurence is on position " << search_res - a << '\n';
     else
         std::cout << "No occurences.\n";
+
+    search_res = find_first_of(a, a + 8, b, b + 2);
+    if (search_res)
+        std::cout << *search_res << " from b is in a on position " << search_res - a << '\n';
+    else
+        std::cout << "No common elements.\n";
     return 0;
 }
