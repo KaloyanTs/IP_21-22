@@ -99,6 +99,21 @@ int *copy_backward(const int *begin, const int *end, int *output_begin)
     return output_begin;
 }
 
+int *remove(int *begin, int *end, int element)
+{
+    int *ptr;
+    while (begin < end && *begin != element)
+        ++begin;
+    ptr = begin;
+    while (ptr < end)
+    {
+        while (ptr < end && *ptr == element)
+            ++ptr;
+        swap(*begin++, *ptr++);
+    }
+    return begin;
+}
+
 int main()
 {
     int a[] = {6, 2, 1, 3, 3, 1, 3, 2};
@@ -134,11 +149,14 @@ int main()
         std::cout << *search_res << " from b is in a on position " << search_res - a << '\n';
     else
         std::cout << "No common elements.\n";
-        
+
     swap_ranges(b, b + 2, a);
 
     copy_backward(b, b + 2, a);
-    print(a,a+8);
-    print(b,b+2);
+    print(a, a + 8);
+    print(b, b + 2);
+
+    int *end = remove(a, a + 8, 3);
+    print(a, end);
     return 0;
 }
