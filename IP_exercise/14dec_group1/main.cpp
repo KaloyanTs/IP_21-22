@@ -114,6 +114,16 @@ int *remove(int *begin, int *end, int element)
     return begin;
 }
 
+void replace(int* begin, int* end, int old_value, int new_value)
+{
+    while(begin<end)
+    {
+        if(*begin==old_value)
+            *begin=new_value;
+        ++begin;
+    }
+}
+
 int main()
 {
     int a[] = {6, 2, 1, 3, 3, 1, 3, 2};
@@ -158,5 +168,8 @@ int main()
 
     int *end = remove(a, a + 8, 3);
     print(a, end);
+
+    replace(a,end,1,5);
+    print(a,end);
     return 0;
 }
