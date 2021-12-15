@@ -1,5 +1,12 @@
 #include <iostream>
 
+void print(const int *begin, const int *end)
+{
+    while (begin < end)
+        std::cout << *begin++ << ' ';
+    std::cout << '\n';
+}
+
 bool equal(const int *begin_1, const int *end_1, const int *begin_2, const int *end_2)
 {
     if (end_1 - begin_1 != end_2 - begin_2)
@@ -84,6 +91,14 @@ void swap_ranges(int *begin_1, int *end_1, int *begin_2)
         swap(*begin_1++, *begin_2++);
 }
 
+int *copy_backward(const int *begin, const int *end, int *output_begin)
+{
+    unsigned i = 0;
+    while (--end >= begin)
+        output_begin[i++] = *end;
+    return output_begin;
+}
+
 int main()
 {
     int a[] = {6, 2, 1, 3, 3, 1, 3, 2};
@@ -119,9 +134,11 @@ int main()
         std::cout << *search_res << " from b is in a on position " << search_res - a << '\n';
     else
         std::cout << "No common elements.\n";
-
+        
     swap_ranges(b, b + 2, a);
-    std::cout << "b[0] = " << b[0] << '\n';
-    std::cout << "b[1] = " << b[1] << '\n';
+
+    copy_backward(b, b + 2, a);
+    print(a,a+8);
+    print(b,b+2);
     return 0;
 }
