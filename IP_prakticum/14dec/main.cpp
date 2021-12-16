@@ -1,13 +1,13 @@
 #include <iostream>
 
-void printArr(int* arr, unsigned size)
+void printArr(int *arr, unsigned size)
 {
 	for (unsigned i = 0; i < size; ++i)
 		std::cout << arr[i] << ' ';
 	std::cout << '\n';
 }
 
-int* getMin(int* a, unsigned size)
+int *getMin(int *a, unsigned size)
 {
 	int minI = 0;
 	for (unsigned i = 1; i < size; ++i)
@@ -17,7 +17,7 @@ int* getMin(int* a, unsigned size)
 	return a;
 }
 
-unsigned myStrlen(const char* str)
+unsigned myStrlen(const char *str)
 {
 	unsigned l = 0;
 	while (*str++)
@@ -25,7 +25,7 @@ unsigned myStrlen(const char* str)
 	return l;
 }
 
-char* myStrcat(char* str1, const char* str2)
+char *myStrcat(char *str1, const char *str2)
 {
 	unsigned l = myStrlen(str1);
 	unsigned add = 0;
@@ -37,7 +37,7 @@ char* myStrcat(char* str1, const char* str2)
 	return str1;
 }
 
-int myStrcmp(const char* str1, const char* str2)
+int myStrcmp(const char *str1, const char *str2)
 {
 	if (str1 == str2)
 		return 0;
@@ -55,14 +55,23 @@ int myStrcmp(const char* str1, const char* str2)
 	return (*str1 < *str2 ? -1 : 1);
 }
 
-void swap(int& a, int& b)
+char *myStrcpy(char *str1, const char *str2)
+{
+	char *res = str1;
+	while (*str2)
+		*str1++ = *str2++;
+	*str1 = '\0';
+	return res;
+}
+
+void swap(int &a, int &b)
 {
 	int tmp = a;
 	a = b;
 	b = tmp;
 }
 
-int* selectionSort(int* const arr, unsigned size)
+int *selectionSort(int *const arr, unsigned size)
 {
 	if (!size)
 		return nullptr;
@@ -77,9 +86,9 @@ int* selectionSort(int* const arr, unsigned size)
 	return arr;
 }
 
-const int* myBinarySearch(const int* beg, unsigned size, unsigned val)
+const int *myBinarySearch(const int *beg, unsigned size, unsigned val)
 {
-	const int* end = beg + size;
+	const int *end = beg + size;
 	while (size > 0 && *(beg + size / 2) != val)
 	{
 		size /= 2;
@@ -96,7 +105,7 @@ void bSearch()
 	unsigned size;
 	std::cout << "Enter size of array: ";
 	std::cin >> size;
-	int* const arr = new int[size];
+	int *const arr = new int[size];
 	std::cout << "Enter the array:\n";
 	for (unsigned i = 0; i < size; ++i)
 		std::cin >> arr[i];
@@ -104,7 +113,7 @@ void bSearch()
 	std::cout << "Value to be searched: ";
 	std::cin >> val;
 	selectionSort(arr, size);
-	const int* b = myBinarySearch(arr, size, val);
+	const int *b = myBinarySearch(arr, size, val);
 	if (!b)
 		std::cout << "NOT found\n";
 	else
@@ -118,7 +127,8 @@ void bSearch()
 void stringFunctions()
 {
 	const unsigned MAX = 64;
-	char str[MAX] = "Hello, world!";
+	char str[MAX] = "Hi!";
+	myStrcpy(str, "Hello, world!");
 	std::cout << myStrlen(str) << '\n';
 	myStrcat(str, " I'm a human!");
 	std::cout << str << std::endl;
@@ -138,6 +148,6 @@ int main()
 	std::cout << "On position: " << min - arr << '\n';
 	std::cout << *arr << std::endl;*/
 	stringFunctions();
-	//bSearch();
+	// bSearch();
 	return 0;
 }
