@@ -30,8 +30,52 @@ void Task1()
     delete[] str;
 }
 
+char *myStrcpy(char *dest, const char *str)
+{
+    char *destCpy = dest;
+    do
+    {
+        *dest++ = *str;
+    } while (*str++);
+    return destCpy;
+}
+
+unsigned myStrlen(const char *str)
+{
+    unsigned l = 0;
+    while (*str++)
+        ++l;
+    return l;
+}
+
+bool endsWithDot(const char *str, unsigned l)
+{
+    return str[l - 1] == '.';
+}
+
+void Task2()
+{
+    const unsigned maxL = 20;
+    char word[maxL];
+    char maxWord[maxL] = "";
+    unsigned maxWordLength = 0, l = 0;
+    do
+    {
+        std::cin.getline(word, maxL, ' ');
+        l = myStrlen(word);
+        if (l > maxWordLength)
+        {
+            myStrcpy(maxWord, word);
+            maxWordLength = l;
+        }
+    } while (!endsWithDot(word, l));
+    std::cout << maxWord << '\n';
+}
+
 int main()
 {
-
+    //Task1()
+    //Task2()
+    
     return 0;
 }
