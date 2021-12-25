@@ -157,11 +157,59 @@ void Task4()
     std::cout << commonLetters(S, d) << '\n';
 }
 
+int myStrcmp(const char *str1, const char *str2)
+{
+    while (*str1 && *str2 && *str1 == *str2)
+    {
+        ++str1;
+        ++str2;
+    }
+    if (!*str1 && !*str2)
+        return 0;
+    if (*str1 > *str2)
+        return 1;
+    return -1;
+}
+
+void printCommon(char (*data)[64], unsigned n)
+{
+    unsigned *count = new unsigned[n]{0};
+    for (unsigned i = 0; i < n; ++i)
+    {
+        if (!count[i])
+        {
+            unsigned currCount = 1;
+            count[i] = currCount++;
+            for (unsigned j = i + 1; j < n; ++j)
+            {
+                if (!myStrcmp(data[i], data[j]))
+                    count[j] = currCount++;
+            }
+            if (currCount > 2)
+                std::cout << data[i] << ' ' << currCount - 1 << '\n';
+        }
+    }
+    delete[] count;
+}
+
+void Task5()
+{
+    const unsigned MAX = 64;
+    char names[MAX][MAX], name[MAX];
+    unsigned count = 0, i = 0;
+    do
+    {
+        std::cin.getline(names[i++], MAX);
+    } while (names[i - 1][0] != '#' || names[i - 1][1] != '#');
+    printCommon(names, i);
+}
+
 int main()
 {
     // Task1()
     // Task2()
     // Task3();
-    Task4();
+    // Task4();
+    Task5();
     return 0;
 }
