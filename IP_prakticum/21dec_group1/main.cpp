@@ -129,10 +129,39 @@ void Task3()
     std::cout << common << '\n';
 }
 
+const char *mystrChr(const char *str, char c)
+{
+    while (*str && *str != c)
+        ++str;
+    return (*str ? str : nullptr);
+}
+
+unsigned commonLetters(const char *str, const char *word)
+{
+    unsigned count{0};
+    while (*word)
+    {
+        if (mystrChr(str, *word++))
+            ++count;
+    }
+    return count;
+}
+
+void Task4()
+{
+    const unsigned MAX_STRING = 500;
+    const unsigned MAX_WORD = 10;
+    char S[MAX_STRING], d[MAX_WORD];
+    std::cin.getline(S, 500);
+    std::cin.getline(d, 10);
+    std::cout << commonLetters(S, d) << '\n';
+}
+
 int main()
 {
     // Task1()
     // Task2()
-    Task3();
+    // Task3();
+    Task4();
     return 0;
 }
