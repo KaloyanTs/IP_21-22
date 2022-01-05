@@ -63,7 +63,7 @@ void printWordArray(char **arr, unsigned n)
         std::cout << arr[i] << '\n';
 }
 
-int main()
+void Task5()
 {
     const unsigned MAX = 32;
     unsigned n;
@@ -72,11 +72,87 @@ int main()
     if (!arr)
     {
         std::cout << "Not enough memory!\n";
-        return 0;
+        return;
     }
     sortWords(arr, n, strcmp);
     std::cout << "Sorted words:\n";
     printWordArray(arr, n);
     deallocWordArray(arr, n);
+}
+
+unsigned isInBeginning(char *text, char *word)
+{
+    unsigned l = 0;
+    while (*word && *text == *word)
+    {
+        ++text;
+        ++word;
+        ++l;
+    }
+    if (!*word)
+        return l;
+    return 0;
+}
+
+char *replace(char *text, char *find, char *replace, const unsigned TEXT_MAX)
+{
+    char *buf = new (std::nothrow) char[TEXT_MAX];
+    if (!buf)
+        return nullptr;
+    unsigned l = 0;
+    while (*text)
+    {
+        unsigned i = isInBeginning(text, find);
+        text += i;
+        if (i)
+        {
+            i = 0;
+            while (replace[i])
+            {
+                buf[l++] = replace[i];
+                ++i;
+            }
+        }
+        else
+        {
+            buf[l++] = *text;
+            ++text;
+        }
+    }
+    buf[l++] = '\0';
+    char *res = new (std::nothrow) char[l];
+    if (!res)
+    {
+        delete[] buf;
+        return nullptr;
+    }
+    strcpy(res, buf);
+    delete[] buf;
+    return res;
+}
+
+void Task6()
+{
+    const unsigned TEXT_MAX = 256;
+    const unsigned WORD_MAX = 32;
+    char text[TEXT_MAX];
+    char word1[WORD_MAX], word2[WORD_MAX];
+    std::cin.getline(text, TEXT_MAX);
+    std::cin.getline(word1, WORD_MAX);
+    std::cin.getline(word2, WORD_MAX);
+    char *res = replace(text, word1, word2, TEXT_MAX * 2);
+    if (!res)
+    {
+        std::cout << "Not enough memory for replace!\n";
+        return;
+    }
+    std::cout << res << '\n';
+    delete[] res;
+}
+
+int main()
+{
+    // Task5();
+    Task6();
     return 0;
 }
