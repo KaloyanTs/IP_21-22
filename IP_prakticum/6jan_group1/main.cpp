@@ -138,8 +138,30 @@ void Task9()
     std::cout << areFactors(arr, n, num) << '\n';
 }
 
+bool isInNum(unsigned num, unsigned digit)
+{
+    if (!num)
+        return false;
+    return num % 10 == digit || isInNum(num / 10, digit);
+}
+
+bool repeatingDigits(unsigned n)
+{
+    if (n < 10)
+        return false;
+    return isInNum(n / 10, n % 10) || repeatingDigits(n / 10);
+}
+
+unsigned biggestUniqueDigits(unsigned n)
+{
+    if (!repeatingDigits(n))
+        return n;
+    return biggestUniqueDigits(n - 1);
+}
+
 int main()
 {
+    unsigned num;
     // std::cout << fib(9) << '\n';
     // readAndPrintReverse(5);
     // std::cout << sumOfDigits(3278538) << '\n';
@@ -152,6 +174,8 @@ int main()
     // insertionSort(arr, 8);
     // print(arr, 8);
     // std::cout << nfib(8, 4) << '\n';
-    Task9();
+    // Task9();
+    std::cin >> num;
+    std::cout << biggestUniqueDigits(num) << '\n';
     return 0;
 }
