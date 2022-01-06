@@ -1,6 +1,13 @@
 #include <iostream>
 #include <climits>
 
+void print(const int *arr, unsigned n)
+{
+    for (unsigned i = 0; i < n; ++i)
+        std::cout << arr[i] << ' ';
+    std::cout << '\n';
+}
+
 unsigned fib(unsigned n)
 {
     if (!n)
@@ -64,14 +71,53 @@ unsigned minElemIndex(const int *arr, unsigned n)
     return IndexWithLowerElement(arr, minElemIndex(arr, n - 1), n - 1);
 }
 
+void swap(int &a, int &b)
+{
+    int tmp = a;
+    a = b;
+    b = tmp;
+}
+
+void selectionSort(int *arr, unsigned n)
+{
+    if (n < 2)
+        return;
+    swap(arr[0], arr[minElemIndex(arr, n)]);
+    selectionSort(arr + 1, n - 1);
+}
+
+void insert(int *arr, unsigned n, int val)
+{
+    if (!n)
+    {
+        arr[0] = val;
+        return;
+    }
+    if (val < arr[0])
+        swap(val, arr[0]);
+    insert(arr + 1, n - 1, val);
+}
+
+void insertionSort(int *arr, unsigned n)
+{
+    if (n == 0)
+        return;
+    insert(arr, n - 1, arr[n - 1]);
+    insertionSort(arr, n - 1);
+}
+
 int main()
 {
     // std::cout << fib(9) << '\n';
     // readAndPrintReverse(5);
     // std::cout << sumOfDigits(3278538) << '\n';
-    int arr[] = {4, 2, 6, 2, 7, 4, 3, 5};
+    int arr[10] = {4, 2, 6, 2, 7, 4, 3, 5};
     // std::cout << maxElem(arr, 8) << '\n';
     // std::cout << isPalindrome("racecar", 7) << '\n';
-    std::cout << minElemIndex(arr, 8) << '\n';
+    // std::cout << minElemIndex(arr, 8) << '\n';
+    // selectionSort(arr, 8);
+    // insert(arr, 8, 5);
+    insertionSort(arr, 8);
+    print(arr, 8);
     return 0;
 }
