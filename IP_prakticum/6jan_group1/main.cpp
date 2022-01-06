@@ -106,6 +106,38 @@ void insertionSort(int *arr, unsigned n)
     insertionSort(arr, n - 1);
 }
 
+unsigned nfib(unsigned n, unsigned k)
+{
+    if (!k)
+        return 0;
+    if (n < k)
+        return 1;
+    if (n == k)
+        return k;
+    return 2 * nfib(n - 1, k) - nfib(n - k - 1, k);
+}
+
+bool areFactors(unsigned *arr, unsigned n, unsigned num)
+{
+    if (!n)
+        return num == 1;
+    if (num % *arr == 0)
+        return areFactors(arr, n, num / *arr);
+    else
+        return areFactors(arr + 1, n - 1, num);
+}
+
+void Task9()
+{
+    unsigned arr[10];
+    unsigned n, num;
+    std::cin >> n;
+    for (unsigned i = 0; i < n; ++i)
+        std::cin >> arr[i];
+    std::cin >> num;
+    std::cout << areFactors(arr, n, num) << '\n';
+}
+
 int main()
 {
     // std::cout << fib(9) << '\n';
@@ -117,7 +149,9 @@ int main()
     // std::cout << minElemIndex(arr, 8) << '\n';
     // selectionSort(arr, 8);
     // insert(arr, 8, 5);
-    insertionSort(arr, 8);
-    print(arr, 8);
+    // insertionSort(arr, 8);
+    // print(arr, 8);
+    // std::cout << nfib(8, 4) << '\n';
+    Task9();
     return 0;
 }
