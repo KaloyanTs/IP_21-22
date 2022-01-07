@@ -37,18 +37,7 @@ char *repeatingWords(const char *text)
             *textPtr = '\0';
             if (strstr(textPtr + 1, word) && !strstr(buf, word))
             //има я напред и не е намирана досега
-            {
                 addWordToList(buf, l, word);
-                /*
-                if (l)
-                    buf[l++] = ' ';
-                buf[l] = '\0';
-                strcat(buf, word);          //  addWordToList
-                l += strlen(word);          //               ни спестява малко време спрямо тези 2 реда?
-                buf[l++] = ',';
-                buf[l] = '\0';
-                */
-            }
             word = textPtr += 2;
             //прескачаме ", "
         }
