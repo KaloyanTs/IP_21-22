@@ -1,64 +1,84 @@
 #include <iostream>
 #include <cstring>
 
-void addWordToList(char *list, unsigned &l, const char *word)
+char *addWordToList(char *listBegin, char *listEnd,
+                    const char *wordBegin, const char *wordEnd)
 {
-    if (l)
-        list[l++] = ' ';
-    list[l] = '\0';
-    while (*word)
-        list[l++] = *word++;
-    list[l++] = ',';
-    list[l] = '\0';
+    if (listBegin != listEnd)
+        *listEnd++ = ' ';
+    while (wordBegin < wordEnd)
+        *listEnd++ = *wordBegin++;
+    *listEnd++ = ',';
+    *listEnd = '\0';
+    return listEnd;
 }
 
-char *repeatingWords(const char *text)
+const char *findLast(const char *begin, const char *end, char c)
 {
-    unsigned l = 0;
-    char *word = new (std::nothrow) char[strlen(text) + 1];
-    if (!word)
-        return nullptr;
-    strcpy(word, text);
-    //за да можем да работим с подадения низ го копираме в нов
-    text = word;
-    char *buf = new (std::nothrow) char[strlen(text) / 2 + 1];
-    //в най-лошия случай всяка дума ще я има точно два пъти и ще се нуждаем от <= толкова място
-    *buf = '\0';
+    do
+    {
+        --end;
+    } while (end >= begin && *end != c);
+    return (end < begin ? nullptr : end);
+}
+
+bool startsWith(const char *sourceBegin, const char *sourceEnd,
+                const char *targetBegin, const char *targetEnd)
+{
+    while (targetBegin < targetEnd &&
+           sourceBegin < sourceEnd &&
+           *targetBegin == *sourceBegin)
+    {
+        ++sourceBegin;
+        ++targetBegin;
+    }
+    return targetBegin == targetEnd;
+}
+
+const char *myStrstr(const char *sourceBegin, const char *sourceEnd,
+                     const char *targetBegin, const char *targetEnd)
+{
+    while (sourceBegin < sourceEnd && !startsWith(sourceBegin, sourceEnd, targetBegin, targetEnd))
+        ++sourceBegin;
+    return (sourceBegin < sourceEnd ? sourceBegin : nullptr);
+}
+
+char *repeatingWords(const char *str)
+{
+    unsigned l = strlen(str);
+    char *buf = new (std::nothrow) char[l / 2 + 1];
     if (!buf)
         return nullptr;
-    char *textPtr = word;
-    while (*textPtr)
+    const char *end = str + l, *last = nullptr;
+    char *bufEnd = buf;
+    do
     {
-        while (*textPtr && *textPtr != ',')
-            ++textPtr;
-        //търсим следващата дума
-        if (*textPtr)
+        last = findLast(str, end, ' ');
+        if (last)
         {
-            *textPtr = '\0';
-            if (strstr(textPtr + 1, word) && !strstr(buf, word))
-            //има я напред и не е намирана досега
-                addWordToList(buf, l, word);
-            word = textPtr += 2;
-            //прескачаме ", "
+            if (myStrstr(str, last - 1, last + 1, end) &&
+                !myStrstr(buf, bufEnd, last + 1, end))
+                bufEnd = addWordToList(buf, bufEnd, last + 1, end);
+            end = last - 1;
         }
+    } while (last);
+    if (bufEnd != buf)
+        --bufEnd;
+    *bufEnd = '\0';
+    char *res = new (std::nothrow) char[strlen(buf) + 1];
+    if (!res)
+    {
+        delete[] buf;
+        return nullptr;
     }
-    if (!l)
-        ++l;
-    buf[l - 1] = '\0';
-    //на тази позиция има ',', която не ни трябва повече
-    char *res = new (std::nothrow) char[l];
-    if (res)
-        strcpy(res, buf);
+    strcpy(res, buf);
     delete[] buf;
-    delete[] text;
     return res;
 }
 
 void repeatingWordsListTask()
 {
-    const unsigned MAX = 128;
-    char buf[MAX] = "cat, dog, cat, I, am, qk, professor, qk, hello";
-    // std::cin.getline(buf, MAX);
+    char buf[] = "cat, dog, cat, I, am, qk, professor, qk, hello";
     char *bufRes = repeatingWords(buf);
     if (!bufRes)
         std::cout << "Not enough memory for repeatingWords!\n";
