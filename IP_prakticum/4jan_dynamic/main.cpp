@@ -80,55 +80,49 @@ void Task5()
     deallocWordArray(arr, n);
 }
 
-unsigned isInBeginning(char *text, char *word)
+char *copy(const char *inputBegin, const char *inputEnd, char *output)
 {
-    unsigned l = 0;
-    while (*word && *text == *word)
-    {
-        ++text;
-        ++word;
-        ++l;
-    }
-    if (!*word)
-        return l;
-    return 0;
+    while (inputBegin < inputEnd)
+        *output++ = *inputBegin++;
+    return output;
 }
 
-char *replace(char *text, char *find, char *replace, const unsigned TEXT_MAX)
+unsigned newLength(const char *text, const char *find, const char *replace)
 {
-    char *buf = new (std::nothrow) char[TEXT_MAX];
+    unsigned res = strlen(text), findLength = strlen(find), replaceLength = strlen(replace);
+    do
+    {
+        text = strstr(text, find);
+        if (text)
+        {
+            res += replaceLength;
+            res -= findLength;
+            text += findLength;
+        }
+    } while (text);
+    return res;
+}
+
+char *replace(const char *text, const char *find, const char *replace)
+{
+    char *buf = new (std::nothrow) char[newLength(text, find, replace) + 1];
     if (!buf)
         return nullptr;
-    unsigned l = 0;
-    while (*text)
+    unsigned rL = strlen(replace), fL = strlen(find);
+    char *bufEnd = buf;
+    const char *textPtr = strstr(text, find);
+    while (textPtr)
     {
-        unsigned i = isInBeginning(text, find);
-        text += i;
-        if (i)
-        {
-            i = 0;
-            while (replace[i])
-            {
-                buf[l++] = replace[i];
-                ++i;
-            }
-        }
-        else
-        {
-            buf[l++] = *text;
-            ++text;
-        }
+        bufEnd = copy(text, textPtr, bufEnd);
+        bufEnd = copy(replace, replace + rL, bufEnd);
+        textPtr += fL;
+        text = textPtr;
+        textPtr = strstr(textPtr, find);
     }
-    buf[l++] = '\0';
-    char *res = new (std::nothrow) char[l];
-    if (!res)
-    {
-        delete[] buf;
-        return nullptr;
-    }
-    strcpy(res, buf);
-    delete[] buf;
-    return res;
+    textPtr = text + strlen(text);
+    bufEnd = copy(text, textPtr, bufEnd);
+    *bufEnd = '\0';
+    return buf;
 }
 
 void Task6()
@@ -140,7 +134,7 @@ void Task6()
     std::cin.getline(text, TEXT_MAX);
     std::cin.getline(word1, WORD_MAX);
     std::cin.getline(word2, WORD_MAX);
-    char *res = replace(text, word1, word2, TEXT_MAX * 2);
+    char *res = replace(text, word1, word2);
     if (!res)
     {
         std::cout << "Not enough memory for replace!\n";
