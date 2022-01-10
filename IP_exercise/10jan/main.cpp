@@ -57,6 +57,7 @@ char *appendWord(const char *begin, const char *end, char *buf)
 {
     while (begin < end)
         *buf++ = *begin++;
+    *buf++ = ',';
     return buf;
 }
 
@@ -86,10 +87,7 @@ const char *adjRepeating(const char *str)
         if (!strPtr2)
             strPtr2 = strEnd;
         if (equal(str, strPtr1, strPtr1 + 1, strPtr2))
-        {
             bufEnd = appendWord(str, strPtr1, bufEnd);
-            *bufEnd++ = ',';
-        }
         str = ++strPtr1;
         strPtr1 = strchr(str, ',');
     }
