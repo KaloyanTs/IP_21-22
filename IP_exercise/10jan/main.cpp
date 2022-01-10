@@ -74,10 +74,11 @@ bool equal(const char *from1, const char *to1,
 
 const char *adjRepeating(const char *str)
 {
-    char *buf = new (std::nothrow) char[strlen(str) + 1];
+    unsigned l = strlen(str);
+    char *buf = new (std::nothrow) char[l + 1];
     if (!buf)
         return nullptr;
-    const char *strEnd = str + strlen(str);
+    const char *strEnd = str + l;
     char *bufEnd = buf;
     const char *strPtr1 = str, *strPtr2 = nullptr;
     strPtr1 = strchr(str, ',');
