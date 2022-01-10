@@ -1,15 +1,13 @@
 #include <iostream>
 #include <cstring>
 
-char *addWordToList(char *listBegin, char *listEnd,
+char *addWordToList(char *listEnd,
                     const char *wordBegin, const char *wordEnd)
 {
-    if (listBegin != listEnd)
-        *listEnd++ = ' ';
     while (wordBegin < wordEnd)
         *listEnd++ = *wordBegin++;
     *listEnd++ = ',';
-    *listEnd = '\0';
+    *listEnd++ = ' ';
     return listEnd;
 }
 
@@ -58,12 +56,12 @@ char *repeatingWords(const char *str)
         {
             if (myStrstr(str, last - 1, last + 1, end) &&
                 !myStrstr(buf, bufEnd, last + 1, end))
-                bufEnd = addWordToList(buf, bufEnd, last + 1, end);
+                bufEnd = addWordToList(bufEnd, last + 1, end);
             end = last - 1;
         }
     } while (last);
     if (bufEnd != buf)
-        --bufEnd;
+        bufEnd -= 2;
     *bufEnd = '\0';
     char *res = new (std::nothrow) char[strlen(buf) + 1];
     if (!res)
@@ -78,7 +76,7 @@ char *repeatingWords(const char *str)
 
 void repeatingWordsListTask()
 {
-    char buf[] = "cat, dog, cat, I, am, qk, professor, qk, hello";
+    char buf[] = "cat, cat, dog, cat, pig, small, sma, small, small, smaller, cat, dog, dog";
     char *bufRes = repeatingWords(buf);
     if (!bufRes)
         std::cout << "Not enough memory for repeatingWords!\n";
