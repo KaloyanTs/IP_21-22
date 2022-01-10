@@ -43,7 +43,7 @@ int specialSum(int **arr, unsigned n)
     return res;
 }
 
-int main()
+void matrixSum()
 {
     unsigned n;
     std::cout << "Enter size of the square matrix: \n";
@@ -51,5 +51,76 @@ int main()
     int **m = allocMatrix(n);
     std::cout << specialSum(m, n) << '\n';
     deallocMatrix(m, n);
+}
+
+char *appendWord(const char *begin, const char *end, char *buf)
+{
+    while (begin < end)
+        *buf++ = *begin++;
+    return buf;
+}
+
+bool equal(const char *from1, const char *to1,
+           const char *from2, const char *to2)
+{
+    while (from1 < to1 && from2 < to2 && *from1 == *from2)
+    {
+        ++from1;
+        ++from2;
+    }
+    return (from1 == to1 && from2 == to2);
+}
+
+const char *adjRepeating(const char *str)
+{
+    char *buf = new (std::nothrow) char[strlen(str) + 1];
+    if (!buf)
+        return nullptr;
+    const char *strEnd = str + strlen(str);
+    char *bufEnd = buf;
+    const char *strPtr1 = str, *strPtr2 = nullptr;
+    strPtr1 = strchr(str, ',');
+    while (strPtr1)
+    {
+        strPtr2 = strchr(strPtr1 + 1, ',');
+        if (!strPtr2)
+            strPtr2 = strEnd;
+        if (equal(str, strPtr1, strPtr1 + 1, strPtr2))
+        {
+            bufEnd = appendWord(str, strPtr1, bufEnd);
+            *bufEnd++ = ',';
+        }
+        str = ++strPtr1;
+        strPtr1 = strchr(str, ',');
+    }
+    if (bufEnd != buf)
+        --bufEnd;
+    *bufEnd = '\0';
+    char *res = new (std::nothrow) char[strlen(buf) + 1];
+    if (res)
+        strcpy(res, buf);
+    delete[] buf;
+    return res;
+}
+
+void consecutiveWords()
+{
+    const unsigned MAX = 128;
+    // char buf[MAX];
+    // std::cin.getline(buf, MAX);
+    const char *res = adjRepeating("cat,cat,dog,cat,pig,small,sma,small,small,smaller,cat,dog,dog");
+    if (!res)
+    {
+        std::cout << "Not enough memory!\n";
+        return;
+    }
+    std::cout << res << '\n';
+    delete[] res;
+}
+
+int main()
+{
+    // matrixSum();
+    consecutiveWords();
     return 0;
 }
