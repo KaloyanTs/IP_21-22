@@ -133,6 +133,19 @@ bool searchLeastCmp(int *arr, unsigned n, int val)
     return false;
 }
 
+bool binarySearch(int *arr, unsigned n, int val)
+{
+    if (!n)
+        return false;
+    if (n == 1)
+        return *arr == val;
+    bool even = !(n % 2);
+    n /= 2;
+    if (arr[n] > val)
+        return binarySearch(arr + n + 1, n - even, val);
+    return binarySearch(arr, n, val);
+}
+
 int main()
 {
     int arr[10] = {1, 4, 3, 2, 5};
@@ -147,5 +160,6 @@ int main()
     print(arr, size);
     // guessTask();
     std::cout << searchLeastCmp(arr, size, -1) << '\n';
+    std::cout << binarySearch(arr, size, 2) << '\n';
     return 0;
 }
