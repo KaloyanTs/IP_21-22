@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring>
 
 unsigned absVal(int n)
 {
@@ -216,10 +217,112 @@ void Task2()
     delete[] arguments;
 }
 
+bool isLetter(char c)
+{
+    return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+}
+
+void appendWord(char *&buf, const char *&str)
+{
+    while (isLetter(*str))
+        *buf++ = *str++;
+}
+
+void findBegining(const char *&s)
+{
+    while (*s && !isLetter(*s))
+        ++s;
+}
+
+unsigned wordCount(const char *s)
+{
+    if (!*s)
+        return 0;
+    unsigned cnt = 0;
+    while (*s)
+        if (*s++ == ' ')
+            ++cnt;
+    return cnt + 1;
+}
+
+void initializeWords(const char **ptr, char *s)
+{
+    unsigned i = 0;
+    ptr[i++] = s++;
+    while (*s)
+        if (*(s - 1) == ' ')
+            ptr[i++] = s;
+}
+
+void modify(char *s)
+{
+    unsigned l = 0;
+    unsigned iter{0};
+    while (s[iter])
+    {
+        if (isLetter(s[iter]))
+            s[l++] = s[iter];
+        else if (iter && isLetter(s[iter - 1]))
+            s[l++] = ' ';
+        ++iter;
+    }
+    if (s[l] == ' ')
+        --l;
+    s[l] = '\0';
+}
+
+void uniqueWords(char *s)
+{
+    modify(s);
+    unsigned wordCnt = wordCount(s);
+    if (!wordCnt)
+        return;
+    const char **ptr = new (std::nothrow) const char *[wordCnt];
+    if (!ptr)
+    {
+        std::cout << "Not enough memory!\n";
+        return;
+    }
+    initializeWords(ptr, s);
+}
+
+void Task3()
+{
+    const unsigned MAX = 1024;
+    char str[MAX];
+    std::cin.getline(str, MAX);
+    uniqueWords(str);
+}
+
+bool rightInLeft(unsigned a, unsigned b)
+{
+    if (a == b)
+        return true;
+    if (!a)
+        return false;
+    if (a % 10 == b % 10)
+        return rightInLeft(a / 10, b / 10) || rightInLeft(a / 10, b);
+    return rightInLeft(a / 10, b);
+}
+
+bool oneInAnother(unsigned a, unsigned b)
+{
+    return rightInLeft(a, b) || rightInLeft(b, a);
+}
+
+void RecTask()
+{
+    unsigned a, b;
+    std::cin >> a >> b;
+    std::cout << std::boolalpha << oneInAnother(a, b) << '\n';
+}
+
 int main()
 {
     // Task1a();
     // Task1b();
-    Task2();
+    // Task2();
+    //                  Task3();
+    RecTask();
     return 0;
 }
