@@ -250,8 +250,11 @@ void initializeWords(const char **ptr, char *s)
     unsigned i = 0;
     ptr[i++] = s++;
     while (*s)
+    {
         if (*(s - 1) == ' ')
             ptr[i++] = s;
+        ++s;
+    }
 }
 
 void modify(char *s)
@@ -271,6 +274,83 @@ void modify(char *s)
     s[l] = '\0';
 }
 
+bool compare(const char *s1, const char *s2)
+{
+    while (*s1 && *s2 && *s1 != ' ' && *s2 != ' ' && *s1 == *s2)
+    {
+        ++s1;
+        ++s2;
+    }
+    return ((!*s1 || *s1 == ' ') && (!*s2 || *s2 == ' '));
+}
+
+unsigned thisWordCount(const char *w, const char **words, unsigned wordCnt)
+{
+    unsigned res{0};
+    for (unsigned i = 0; i < wordCnt; ++i)
+        if (compare(w, words[i]))
+            ++res;
+    return res;
+}
+
+void swap(const char *&a, const char *&b)
+{
+    const char *tmp = a;
+    a = b;
+    b = tmp;
+}
+
+void swap(unsigned &a, unsigned &b)
+{
+    unsigned tmp = a;
+    a = b;
+    b = tmp;
+}
+
+void selectionSort(const char **words, unsigned wordCnt, unsigned *counts)
+{
+    unsigned iMin{0};
+    for (unsigned i = 0; i < wordCnt - 1; ++i)
+    {
+        iMin = i;
+        for (unsigned j = i + 1; j < wordCnt; ++j)
+            if (counts[j] > counts[iMin])
+                iMin = j;
+        swap(counts[iMin], counts[i]);
+        swap(words[i], words[iMin]);
+    }
+}
+
+void printWord(const char *word)
+{
+    while (*word && *word != ' ')
+        std::cout << *word++;
+    std::cout << ' ';
+}
+
+void printWordsArr(const char **words, unsigned wordCnt)
+{
+    for (unsigned i = 0; i < wordCnt; ++i)
+        printWord(words[i]);
+    std::cout << '\n';
+}
+
+void reduceWords(const char **words, unsigned &wordCnt, unsigned *counts)
+{
+    unsigned newCnt = 0;
+    unsigned iter{0};
+    while (iter < wordCnt)
+    {
+        if (words[iter])
+        {
+            words[newCnt] = words[iter];
+            counts[newCnt++] = counts[iter];
+        }
+        ++iter;
+    }
+    wordCnt = newCnt;
+}
+
 void uniqueWords(char *s)
 {
     modify(s);
@@ -278,12 +358,26 @@ void uniqueWords(char *s)
     if (!wordCnt)
         return;
     const char **ptr = new (std::nothrow) const char *[wordCnt];
-    if (!ptr)
+    unsigned *counts = new (std::nothrow) unsigned[wordCnt];
+    if (!ptr || !counts)
     {
         std::cout << "Not enough memory!\n";
         return;
     }
     initializeWords(ptr, s);
+    for (unsigned i = 0; i < wordCnt; ++i)
+        counts[i] = 1;
+    for (unsigned i = 0; i < wordCnt - 1; ++i)
+        if (ptr[i])
+            for (unsigned j = i + 1; j < wordCnt; ++j)
+                if (ptr[j] && compare(ptr[i], ptr[j]))
+                {
+                    ++counts[i];
+                    ptr[j] = nullptr;
+                }
+    reduceWords(ptr, wordCnt, counts);
+    selectionSort(ptr, wordCnt, counts);
+    printWordsArr(ptr, wordCnt);
 }
 
 void Task3()
@@ -322,7 +416,7 @@ int main()
     // Task1a();
     // Task1b();
     // Task2();
-    //                  Task3();
-    RecTask();
+    Task3();
+    // RecTask();
     return 0;
 }
