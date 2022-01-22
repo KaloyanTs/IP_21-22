@@ -284,15 +284,6 @@ bool compare(const char *s1, const char *s2)
     return ((!*s1 || *s1 == ' ') && (!*s2 || *s2 == ' '));
 }
 
-unsigned thisWordCount(const char *w, const char **words, unsigned wordCnt)
-{
-    unsigned res{0};
-    for (unsigned i = 0; i < wordCnt; ++i)
-        if (compare(w, words[i]))
-            ++res;
-    return res;
-}
-
 void swap(const char *&a, const char *&b)
 {
     const char *tmp = a;
@@ -392,7 +383,7 @@ bool rightInLeft(unsigned a, unsigned b)
 {
     if (a == b)
         return true;
-    if (!a)
+    if (b > a)
         return false;
     if (a % 10 == b % 10)
         return rightInLeft(a / 10, b / 10) || rightInLeft(a / 10, b);
