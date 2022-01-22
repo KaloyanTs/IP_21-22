@@ -5,7 +5,7 @@ int lastPos(const int *arr, unsigned n, int val)
     unsigned i = n - 1;
     while (i < n && arr[i] != val)
         --i;
-    return (i >= 0 ? i : -1);
+    return (i < n ? i : -1);
 }
 
 void insertAdd(int *arr, unsigned &n, unsigned pos, int val)
@@ -151,6 +151,7 @@ int main()
     int arr[10] = {1, 4, 3, 2, 5};
     unsigned size = 5;
     std::cout << lastPos(arr, size, 4) << '\n';
+    std::cout << lastPos(arr, size, 6) << '\n';
     insertOddSum(arr, size);
     print(arr, size);
     selectionSort(arr, size);
