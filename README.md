@@ -1,2 +1,2 @@
-# Introduction to programming at FMI (I semester)
+# Introduction to programming at FMI (semester I)
  Kaloyan Tsvetkov
